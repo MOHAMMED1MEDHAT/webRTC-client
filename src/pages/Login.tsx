@@ -75,6 +75,15 @@ export const Login = () => {
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
+
+        <div className="text-center mt-4">
+          <button
+            onClick={() => navigate('/forgot-password')}
+            className="text-blue-500 hover:underline text-sm font-medium"
+          >
+            Forgot Password?
+          </button>
+        </div>
       </div>
     </div>
   );

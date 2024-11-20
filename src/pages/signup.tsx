@@ -13,7 +13,7 @@ export const Signup = () => {
     setIsLoading(true);
     try {
       // Replace with your API endpoint
-      const response = await fetch('/api/auth/signup', {
+      const response = await fetch('/api/v1/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }),
@@ -72,6 +72,15 @@ export const Signup = () => {
         >
           {isLoading ? 'Signing up...' : 'Sign Up'}
         </button>
+
+        <div className="text-center mt-4">
+          <button
+            onClick={() => navigate('/forgot-password')}
+            className="text-blue-500 hover:underline text-sm font-medium"
+          >
+            Forgot Password?
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import React from 'react';
 import { Send, X } from 'lucide-react';
-import { useMeetStore } from '../store/meetStore';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useMeetStore } from '../store/meetStore';
 
 interface ChatProps {
   isOpen: boolean;

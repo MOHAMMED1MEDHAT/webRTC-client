@@ -1,12 +1,11 @@
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthGuard } from './components/AuthGuard';
-import { ForgotPassword } from './pages/forget-password';
+import { ForgotPassword } from './pages/forgetPassword';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Meeting } from './pages/Meeting';
-import { ResetPassword } from './pages/reset-password';
+import { ResetPassword } from './pages/resetPassword';
 import { Signup } from './pages/signup';
 import { useAuthStore } from './store/authStore';
 
@@ -34,8 +33,10 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
-        <Route path="/meeting/:id" element={<AuthGuard><Meeting /></AuthGuard>} />
+        {/* <Route path="/" element={<AuthGuard><Home /></AuthGuard>} /> */}
+        <Route path="/" element={<Home />} />
+        {/* <Route path="/meeting/:id" element={<AuthGuard><Meeting /></AuthGuard>} /> */}
+        <Route path="/meeting/:id" element={<Meeting />} />
       </Routes>
       <Toaster position="top-center" />
     </BrowserRouter>

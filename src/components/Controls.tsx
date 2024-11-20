@@ -1,5 +1,5 @@
-import React from 'react';
-import { Mic, MicOff, Video, VideoOff, Monitor, MessageCircle, Phone } from 'lucide-react';
+import { MessageCircle, Mic, MicOff, Monitor, Phone, Video, VideoOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useMeetStore } from '../store/meetStore';
 
 interface ControlsProps {
@@ -15,6 +15,8 @@ export const Controls = ({ onChatToggle }: ControlsProps) => {
     toggleVideo,
     toggleScreenShare
   } = useMeetStore();
+
+  const navigate = useNavigate();
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-16 bg-white border-t flex items-center justify-center gap-4 px-4">
@@ -47,7 +49,7 @@ export const Controls = ({ onChatToggle }: ControlsProps) => {
       </button>
 
       <button
-        onClick={() => window.location.reload()}
+        onClick={() => navigate('/')}
         className="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white"
       >
         <Phone size={24} />

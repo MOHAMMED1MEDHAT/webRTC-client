@@ -1,12 +1,12 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { VideoGrid } from '../components/VideoGrid';
-import { Controls } from '../components/Controls';
+import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Chat } from '../components/Chat';
+import { Controls } from '../components/Controls';
+import { VideoGrid } from '../components/VideoGrid';
+import { useAuthStore } from '../store/authStore';
 import { useMeetStore } from '../store/meetStore';
 import { useMeetingStore } from '../store/meetingStore';
-import { useAuthStore } from '../store/authStore';
-import toast from 'react-hot-toast';
 
 export const Meeting = () => {
   const { id } = useParams();
@@ -18,7 +18,8 @@ export const Meeting = () => {
 
   React.useEffect(() => {
     const initializeMeeting = async () => {
-      if (id && user) {
+      // if (id && user) {
+      const id='testId'
         const exists = await joinMeeting(id);
         if (!exists) {
           toast.error('Meeting not found');
@@ -36,7 +37,7 @@ export const Meeting = () => {
           console.error('Error accessing media devices:', error);
           toast.error('Could not access camera or microphone');
         }
-      }
+      // }
     };
 
     initializeMeeting();
