@@ -1,43 +1,41 @@
+
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-export const Login = () => {
-  const { setUser } = useAuthStore();
+export const ResetPassword = () => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const token = searchParams.get('token');
+
+  const handleResetPassword = async () => {
+    if (password !== confirmPassword) {
+      toast.error("Passwords don't match");
+      return;
+    }
+
     setIsLoading(true);
     try {
       // Replace with your API endpoint
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ token, password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
+        throw new Error(errorData.message || 'Failed to reset password');
       }
 
-      const { user, token } = await response.json();
-
-      // Save the token (e.g., in localStorage or cookies)
-      localStorage.setItem('authToken', token);
-
-      // Update the auth store
-      setUser(user);
-
-      toast.success('Login successful!');
-      navigate('/');
+      toast.success('Password reset successful!');
+      navigate('/login');
     } catch (error: any) {
-      toast.error(error.message || 'Failed to log in. Please try again.');
+      toast.error(error.message || 'Failed to reset password. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -47,33 +45,33 @@ export const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Login</h2>
-          <p className="mt-2 text-sm text-gray-600">Enter your email and password</p>
+          <h2 className="text-3xl font-bold text-gray-900">Reset Password</h2>
+          <p className="mt-2 text-sm text-gray-600">Enter your new password</p>
         </div>
 
         <div className="space-y-4">
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="password"
+            placeholder="New Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <button
-          onClick={handleLogin}
-          disabled={isLoading}
+          onClick={handleResetPassword}
+          disabled={isLoading || !token}
           className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? 'Logging in...' : 'Login'}
+          {isLoading ? 'Resetting...' : 'Reset Password'}
         </button>
       </div>
     </div>

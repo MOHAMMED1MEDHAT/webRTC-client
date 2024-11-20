@@ -1,29 +1,39 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './lib/firebase';
-import { useAuthStore } from './store/authStore';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthGuard } from './components/AuthGuard';
-import { Login } from './pages/Login';
+import { ForgotPassword } from './pages/forget-password';
 import { Home } from './pages/Home';
+import { Login } from './pages/Login';
 import { Meeting } from './pages/Meeting';
+import { ResetPassword } from './pages/reset-password';
+import { Signup } from './pages/signup';
+import { useAuthStore } from './store/authStore';
 
 function App() {
   const { setUser } = useAuthStore();
 
   React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-
-    return () => unsubscribe();
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      fetch('/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((user) => setUser(user))
+        .catch(() => setUser(null));
+    } else {
+      setUser(null);
+    }
   }, []);
-
+  
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
         <Route path="/meeting/:id" element={<AuthGuard><Meeting /></AuthGuard>} />
       </Routes>

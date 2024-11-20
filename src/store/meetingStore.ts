@@ -1,14 +1,4 @@
 import { create } from 'zustand';
-import { db } from '../lib/firebase';
-import { 
-  collection, 
-  addDoc, 
-  getDoc, 
-  doc, 
-  updateDoc, 
-  serverTimestamp 
-} from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
 
 interface MeetingStore {
   createMeeting: () => Promise<string>;
@@ -22,19 +12,17 @@ export const useMeetingStore = create<MeetingStore>((set) => ({
   setCurrentMeetingId: (id) => set({ currentMeetingId: id }),
   
   createMeeting: async () => {
-    const meetingId = uuidv4().substring(0, 8);
-    await addDoc(collection(db, 'meetings'), {
-      meetingId,
-      createdAt: serverTimestamp(),
-      participants: []
-    });
+    //this line represents the fetch step from the backed to create a meeting and get it's id in return
+    // const meetingId = fetch
+    const meetingId='testId'
     set({ currentMeetingId: meetingId });
     return meetingId;
   },
   
   joinMeeting: async (meetingId) => {
-    const meetingsRef = collection(db, 'meetings');
-    const querySnapshot = await getDoc(doc(meetingsRef, meetingId));
+    //this line must be replaced with the a fetch logic from the backend
+    // const querySnapshot = await getDoc(doc(meetingsRef, meetingId));
+    const querySnapshot = {test:'test',exists:()=>{return true}}
     
     if (querySnapshot.exists()) {
       set({ currentMeetingId: meetingId });
